@@ -17,14 +17,16 @@ router.post('/output', function(req,res){
       input: fs.createReadStream(req.file.path)
     });
     lineReader.on('line', function (line) {
+      lineReader.pause();
       var line_obj = {};
       if(line){
         var line_split = line.split(" ");
         if(line_split[3].indexOf('faasos') > -1){
           var client_ip = line_split[8].split(":");
           var url_request = 'http://ipinfo.io/'+ client_ip[0];
-          lineReader.pause();
+          // lineReader.pause();
           request(url_request,function(error, response, body){
+            lineReader.resume();
             // console.log(response);
             if(response.statusCode == 200){
               var output = JSON.parse(body);
@@ -35,7 +37,7 @@ router.post('/output', function(req,res){
                 line_obj.status = 'No';
                 line_obj.line = line;
               }
-              lineReader.resume();
+
               line_arr.push(line_obj);
             }
           });
