@@ -26,8 +26,8 @@ router.post('/output', function(req,res){
           var url_request = 'http://ipinfo.io/'+ client_ip[0];
           // lineReader.pause();
           request(url_request,function(error, response, body){
-            lineReader.resume();
             // console.log(response);
+
             if(response.statusCode == 200){
               var output = JSON.parse(body);
               if(output.country != 'IN'){
@@ -39,6 +39,7 @@ router.post('/output', function(req,res){
               }
 
               line_arr.push(line_obj);
+              lineReader.resume();
             }
           });
         }else{
