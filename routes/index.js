@@ -27,7 +27,7 @@ router.post('/output', function(req,res){
           // lineReader.pause();
           request(url_request,function(error, response, body){
             // console.log(response);
-
+            lineReader.resume();
             if(response.statusCode == 200){
               var output = JSON.parse(body);
               if(output.country != 'IN'){
@@ -37,9 +37,8 @@ router.post('/output', function(req,res){
                 line_obj.status = 'No';
                 line_obj.line = line;
               }
-
               line_arr.push(line_obj);
-              lineReader.resume();
+
             }
           });
         }else{
