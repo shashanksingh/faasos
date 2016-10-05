@@ -17,18 +17,19 @@ router.post('/output', function(req,res){
       input: fs.createReadStream(req.file.path)
     });
     lineReader.on('line', function (line) {
-      lineReader.pause();
+      // lineReader.pause();
       var line_obj = {};
       if(line){
         var line_split = line.split(" ");
         if(line_split[3].indexOf('faasos') > -1){
           var client_ip = line_split[8].split(":");
           var url_request = 'http://ipinfo.io/'+ client_ip[0];
-          // lineReader.pause();
+          lineReader.pause();
           request(url_request,function(error, response, body){
             // console.log(response);
-            lineReader.resume();
+
             if(response.statusCode == 200){
+              lineReader.resume();
               var output = JSON.parse(body);
               if(output.country != 'IN'){
                 line_obj.status = 'Yes';
